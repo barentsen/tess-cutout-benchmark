@@ -9,15 +9,15 @@ which measures the time it takes to extract cutouts from TESS Full Frame Images 
 2. from AWS S3 using the experimental [s3-support branch](https://github.com/spacetelescope/astrocut/pull/44) branch of the `astrocut` package.
 
 The benchmark was run in the following way:
-* All benchmarks ran on AWS EC2 using the TIKE platform, which provides 4 virtual cores.
-* All cutouts are made for random positions in sectors 30 through 39.
-* All cutouts are 10 by 10 pixels in size.
+* All benchmarks ran on AWS EC2 instances accessed via the TIKE platform, which provides 4 virtual cores.
+* All cutouts were made for random positions in sectors 30 through 39.
+* All cutouts were 10 by 10 pixels in size.
 
 
 ## Results
 
-The table below summarizes the snapshot performance observed in the evening of August 24, 2021 (Pacific Time).
-The table shows the wall times that were required to obtain a specific number of random cutouts from MAST using the TESSCut API (`TESSCut`) and from AWS S3 using Astrocut (`TIKE-Astrocut`). The benchmarks were run in parallel using increasing number of processes (`nProc`) on a 4-core EC2 instance provided by TIKE.
+The table below shows the snapshot performance observed in the evening of August 24, 2021 (Pacific Time).
+The table shows the wall times that were required to obtain a given number of random cutouts from MAST using the TESSCut API (`TESSCut`) and from AWS S3 using Astrocut (`TIKE-Astrocut`). The benchmarks were run in parallel using an increasing number of simultaneous processes (`nProc`).
 
 | Benchmark                  | nProc | TESSCut         | TIKE-Astrocut
 | :------------------------- | ----: | --------------: | ------------:
@@ -32,14 +32,14 @@ The table shows the wall times that were required to obtain a specific number of
 | 100 cutouts (16x parallel) |   16† |  not supported‡ |          37s
 | 1000 cutouts (16x parallel)|   16† |  not supported‡ |        5m40s
 
-† TIKE offers 4 virtual cores. As a result, the benchmarks for `nProc=16` saturated the instance and could likely be sped up if a larger instance were used. Monitoring `top` revealed that the TIKE-Astrocut jobs were consistently compute-limited.
+† TIKE offers 4 virtual cores. As a result, the benchmarks for `nProc=16` saturated the instance and could likely be sped up if a larger instance were used; monitoring `top` revealed that the TIKE-Astrocut jobs were consistently compute-limited.
 
-‡ The TESSCut API does not currently allow more than 10 simultaneous requests, which is why the entries for `nProc=16` show `not supported`.
+‡ The TESSCut API does not currently allow more than 10 simultaneous requests, hence its entries for `nProc=16` show `not supported`.
 
 
 ## Results ranked by cutouts per second
 
-The table below shows the same results as provided by the table above, but this time ranked by the number of random 10-by-10px cutouts that could be obtained per second.
+The table below shows the same results as provided by the table above, but this time ranked by the number of cutouts that could be obtained per second.
 
 
 | Method         | nCutouts | nProc | Cutouts/second
@@ -70,4 +70,4 @@ Questions not yet investigated include:
 * What if a more powerful EC2 instance was used? What would the speed-up be when using e.g. 32 cores instead of the 4 provided by TIKE?
 * What if the astrocut function were implemented as an AWS Lambda service?
 * What if the astrocut cube files were available locally to the instance?
-* What if the astrocut cube files were converted to the `zarr` file format first, which provides native support for cloud-based cutouts.
+* What if the astrocut cube files were converted to the `zarr` file format first, which provides native support for cloud-based cutouts and may require less compute power on the client side.
