@@ -19,23 +19,48 @@ The benchmark was run in the following way:
 The table below shows the typical results obtained at a single point in time in the evening of August 24, 2021 (Pacific Time).
 The wall times required to obtain the cutouts from MAST via the TESSCut API (`TESSCut`) and from AWS S3 using Astrocut (`TIKE-Astrocut`) are shown. The benchmarks were run in parallel using increasing number of processes (`nProc`) on a single TIKE instance.
 
-| Benchmark               | nProc  | TESSCut | TIKE-Astrocut
-| -----------             | ----: | ------: | ---------:
-| 1 cutout                |     1 |      2s |         2s
-| 10 cutouts              |     1 |     30s |        16s
-| 100 cutouts             |     1 |   4m21s |      2m23s
-| 1000 cutouts            |     1 |     45m19s |     23m21s
-| 10 cutouts (4x parallel)   |     4 |     10s |         5s
-| 100 cutouts (4x parallel)  |     4 |   1m39s |        45s
-| 1000 cutouts (4x parallel) |     4 |  13m55s |      6m30s
-| 10 cutouts (16x parallel)  |    16† |  disallowed‡ |       4s
-| 100 cutouts (16x parallel) |    16† |  disallowed‡ |     37s
-| 1000 cutouts (16x parallel) |    16† |  disallowed‡ |    5m40s
-
+| Benchmark                  | nProc | TESSCut         | TIKE-Astrocut
+| :------------------------- | ----: | --------------: | ------------:
+| 1 cutout                   |     1 |              2s |           2s
+| 10 cutouts                 |     1 |             30s |          16s
+| 100 cutouts                |     1 |           4m21s |        2m23s
+| 1000 cutouts               |     1 |          45m19s |       23m21s
+| 10 cutouts (4x parallel)   |     4 |             10s |           5s
+| 100 cutouts (4x parallel)  |     4 |           1m39s |          45s
+| 1000 cutouts (4x parallel) |     4 |          13m55s |        6m30s
+| 10 cutouts (16x parallel)  |   16† |  not supported‡ |           4s
+| 100 cutouts (16x parallel) |   16† |  not supported‡ |          37s
+| 1000 cutouts (16x parallel)|   16† |  not supported‡ |        5m40s
 
 † TIKE offers 4 virtual cores. As a result, the benchmarks for `nProc=16` saturated the instance and could likely be sped up if a larger instance were used.
 
-‡ The TESSCut API does not currently allow more than 10 simultaneous requests, which is why the entries for `nProc=16` show `disallowed`.
+‡ The TESSCut API does not currently allow more than 10 simultaneous requests, which is why the entries for `nProc=16` show `not supported`.
+
+
+## Results ranked by cutouts per second
+
+The table below shows the same results as provided by the table above, but this time ranked by the number of random 10-by-10px cutouts that could be obtained per second.
+
+
+| Method         | nCutouts | nProc | Cutouts/second
+| :------------  | -------: | ----: | -------------:
+| TIKE-Astrocut  | 1000     |    16 |   2.94
+| TIKE-Astrocut  | 100      |    16 |   2.70
+| TIKE-Astrocut  | 1000     |     4 |   2.56
+| TIKE-Astrocut  | 10       |    16 |   2.50
+| TIKE-Astrocut  | 100      |     4 |   2.22
+| TIKE-Astrocut  | 10       |     4 |   2.00
+| TESSCut        | 1000     |     4 |   1.20
+| TESSCut        | 100      |     4 |   1.01
+| TESSCut        | 10       |     4 |   1.00
+| TIKE-Astrocut  | 1000     |     1 |   0.71
+| TIKE-Astrocut  | 100      |     1 |   0.70
+| TIKE-Astrocut  | 10       |     1 |   0.63
+| TIKE-Astrocut  | 1        |     1 |   0.50
+| TESSCut        | 1        |     1 |   0.50
+| TESSCut        | 100      |     1 |   0.38
+| TESSCut        | 1000     |     1 |   0.37
+| TESSCut        | 10       |     1 |   0.33
 
 
 ## Further work
