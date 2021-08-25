@@ -63,9 +63,11 @@ The table below shows the same results as provided by the table above, but this 
 | TESSCut        | 10       |     1 |   0.33
 
 
-## Further work
+## Possible further work
 
 Questions not yet investigated include:
-* What is the performance if the astrocut function were implemented as an AWS Lambda service?
-* What if the astrocut cube files were available locally?
+* How does the performance compare to a typical home network?
+* What if a more powerful EC2 instance was used? What would the speed-up be when using e.g. 32 cores instead of the 4 provided by TIKE?
+* What if the astrocut function were implemented as an AWS Lambda service?
+* What if the astrocut cube files were available locally to the instance?
 * What if the astrocut cube files were converted to the `zarr` file format first, which provides native support for cloud-based cutouts.
