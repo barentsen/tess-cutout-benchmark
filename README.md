@@ -6,7 +6,7 @@ This repository contains a
 [Python notebook](https://github.com/barentsen/tess-cutout-benchmark/blob/master/tess-cutout-benchmark.ipynb)
 which measures the time it takes to extract cutouts from TESS Full Frame Images in two different ways:
 1. from MAST using the [TESSCut API](https://mast.stsci.edu/tesscut/) accessed via the `astroquery` package;
-2. from AWS S3 using the experimental [s3-support](https://github.com/spacetelescope/astrocut/pull/44) branch of the `astrocut` package.
+2. from AWS S3 using the experimental [s3-support branch](https://github.com/spacetelescope/astrocut/pull/44) branch of the `astrocut` package.
 
 The benchmark was run in the following way:
 * All benchmarks ran on AWS EC2 using the TIKE platform, which provides 4 virtual cores.
@@ -16,8 +16,8 @@ The benchmark was run in the following way:
 
 ## Results
 
-The table below shows the typical results obtained at a single point in time in the evening of August 24, 2021 (Pacific Time).
-The wall times required to obtain the cutouts from MAST via the TESSCut API (`TESSCut`) and from AWS S3 using Astrocut (`TIKE-Astrocut`) are shown. The benchmarks were run in parallel using increasing number of processes (`nProc`) on a single TIKE instance.
+The table below summarizes the snapshot performance observed in the evening of August 24, 2021 (Pacific Time).
+The table shows the wall times that were required to obtain a specific number of random cutouts from MAST using the TESSCut API (`TESSCut`) and from AWS S3 using Astrocut (`TIKE-Astrocut`). The benchmarks were run in parallel using increasing number of processes (`nProc`) on a 4-core EC2 instance provided by TIKE.
 
 | Benchmark                  | nProc | TESSCut         | TIKE-Astrocut
 | :------------------------- | ----: | --------------: | ------------:
@@ -32,7 +32,7 @@ The wall times required to obtain the cutouts from MAST via the TESSCut API (`TE
 | 100 cutouts (16x parallel) |   16† |  not supported‡ |          37s
 | 1000 cutouts (16x parallel)|   16† |  not supported‡ |        5m40s
 
-† TIKE offers 4 virtual cores. As a result, the benchmarks for `nProc=16` saturated the instance and could likely be sped up if a larger instance were used.
+† TIKE offers 4 virtual cores. As a result, the benchmarks for `nProc=16` saturated the instance and could likely be sped up if a larger instance were used. Monitoring `top` revealed that the TIKE-Astrocut jobs were consistently compute-limited.
 
 ‡ The TESSCut API does not currently allow more than 10 simultaneous requests, which is why the entries for `nProc=16` show `not supported`.
 
